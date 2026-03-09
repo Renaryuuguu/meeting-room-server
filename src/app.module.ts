@@ -3,7 +3,10 @@ import { PrimsaModule } from './prisma/prisma.module';
 import { RedisModule } from './redis/redis.module';
 import { LoggerModule } from 'nestjs-pino';
 import { ConfigModule } from '@nestjs/config';
-import { AuthModule } from './modules/auth/auth.module';
+import { AuthModule } from '@modules/auth/auth.module';
+import { UserModule } from '@modules/user/user.module';
+import { MeetingRoomModule } from '@modules/meeting-room/meeting-room.module';
+import { BookingModule } from '@modules/booking/booking.module';
 
 @Module({
   imports: [
@@ -25,6 +28,9 @@ import { AuthModule } from './modules/auth/auth.module';
     PrimsaModule,
     RedisModule,
     AuthModule,
+    UserModule,
+    MeetingRoomModule,
+    BookingModule,
   ],
   controllers: [],
   providers: [],
