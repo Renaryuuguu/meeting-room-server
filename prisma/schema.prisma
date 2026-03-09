@@ -1,0 +1,115 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum RoleCode {
+  EMPLOYEE
+  DEPT_ADMIN
+  SYS_ADMIN
+}
+
+enum BookingStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+  FINISHED
+}
+
+model User {
+  id         Int     @id @default(autoincrement())
+  openid     String? @unique @map("open_id")
+  employeeNo String? @unique
+  name       String
+  phone      String?
+
+  departmentId Int? @map("department_id")
+
+  department Department? @relation(fields: [departmentId], references: [id])
+  roles      UserRole[]
+  bookings   Booking[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("user")
+}
+
+model Department {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  users User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Role {
+  id   Int      @id @default(autoincrement())
+  code RoleCode @unique
+  name String
+
+  users UserRole[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserRole {
+  id Int @id @default(autoincrement())
+
+  userId Int @map("user_id")
+  roleId Int @map("role_id")
+
+  user User @relation(fields: [userId], references: [id])
+  role Role @relation(fields: [roleId], references: [id])
+
+  @@unique([userId, roleId])
+}
+
+model MeetingRoom {
+  id       Int    @id @default(autoincrement())
+  name     String
+  location String
+  capacity Int
+  status   String @default("ENABLED")
+
+  bookings Booking[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Booking {
+  id             Int           @id @default(autoincrement())
+  startTime      DateTime
+  endTime        DateTime
+  purpose        String
+  attendeeCount  Int           @map("attendee_count")
+  status         BookingStatus @default(PENDING)
+  approvalRemark String?       @map("approval_remark")
+  approvalTime   DateTime?     @map("approval_time")
+
+  userId Int @map("user_id")
+  roomId Int @map("room_id")
+
+  user User        @relation(fields: [userId], references: [id])
+  room MeetingRoom @relation(fields: [roomId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([roomId, startTime, endTime, status])
+  @@index([userId, status])
+}
