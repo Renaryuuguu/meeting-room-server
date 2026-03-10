@@ -1,10 +1,13 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  @Post('wechat/login')
-  wxLogin() {
-    return 'wechat/login';
+  constructor(private readonly authService: AuthService) {}
+
+  @Post('wx-login')
+  async wxLogin(@Body() code: string) {
+    return this.authService.wxLogin(code);
   }
 
   @Post('bind-employee')

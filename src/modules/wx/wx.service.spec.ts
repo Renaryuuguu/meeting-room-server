@@ -1,17 +1,17 @@
 import type { TestingModule } from '@nestjs/testing';
 import { Test } from '@nestjs/testing';
 
-import { MeetingRoomService } from './meeting-room.service';
+import { WxService } from './wx.service';
 
-describe('MeetingRoomService', () => {
-  let service: MeetingRoomService;
+describe('WxService', () => {
+  let service: WxService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [MeetingRoomService],
+      providers: [WxService],
     }).compile();
 
-    service = module.get<MeetingRoomService>(MeetingRoomService);
+    service = module.get<WxService>(WxService);
   });
 
   it('should be defined', () => {
