@@ -42,6 +42,7 @@ export default tseslint.config(
           fixStyle: 'separate-type-imports',
         },
       ],
+      'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
 
       'import/no-duplicates': 'error',
       'import/newline-after-import': 'error',
