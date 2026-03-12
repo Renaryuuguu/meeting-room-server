@@ -2,13 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-interface Code2SessionResponse {
-  session_key: string;
-  unionid: string;
-  openid: string;
-  errcode: number;
-  errmsg: string;
-}
+import { Code2SessionResponse } from './interfaces/code2Session.interface';
 
 @Injectable()
 export class WxService {
@@ -35,7 +29,7 @@ export class WxService {
       },
     );
 
-    if (data.errcode) {
+    if ('errcode' in data) {
       throw new Error(data.errmsg || '微信登录失败');
     }
 

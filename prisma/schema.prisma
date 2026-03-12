@@ -29,18 +29,19 @@ enum BookingStatus {
 model User {
   id         Int     @id @default(autoincrement())
   openid     String? @unique @map("open_id")
-  employeeNo String? @unique
+  employeeNo String? @unique @map("employee_no")
   name       String
   phone      String?
 
   departmentId Int? @map("department_id")
+  roleId       Int? @map("role_id")
 
   department Department? @relation(fields: [departmentId], references: [id])
-  roles      UserRole[]
+  role       Role?       @relation(fields: [roleId], references: [id])
   bookings   Booking[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("user")
 }
@@ -51,8 +52,8 @@ model Department {
 
   users User[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 }
 
 model Role {
@@ -60,22 +61,10 @@ model Role {
   code RoleCode @unique
   name String
 
-  users UserRole[]
+  users User[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model UserRole {
-  id Int @id @default(autoincrement())
-
-  userId Int @map("user_id")
-  roleId Int @map("role_id")
-
-  user User @relation(fields: [userId], references: [id])
-  role Role @relation(fields: [roleId], references: [id])
-
-  @@unique([userId, roleId])
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 }
 
 model MeetingRoom {
@@ -87,14 +76,16 @@ model MeetingRoom {
 
   bookings Booking[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("meeting_room")
 }
 
 model Booking {
   id             Int           @id @default(autoincrement())
-  startTime      DateTime
-  endTime        DateTime
+  startTime      DateTime      @map("start_time")
+  endTime        DateTime      @map("end_time")
   purpose        String
   attendeeCount  Int           @map("attendee_count")
   status         BookingStatus @default(PENDING)
@@ -107,8 +98,8 @@ model Booking {
   user User        @relation(fields: [userId], references: [id])
   room MeetingRoom @relation(fields: [roomId], references: [id])
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@index([roomId, startTime, endTime, status])
   @@index([userId, status])

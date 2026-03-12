@@ -4,6 +4,7 @@ import type { JwtSignOptions } from '@nestjs/jwt';
 import { JwtModule } from '@nestjs/jwt';
 
 import { WxModule } from '@/modules/wx/wx.module';
+import { PrimsaModule } from '@/prisma/prisma.module';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -26,6 +27,7 @@ import { AuthService } from './auth.service';
       },
     }),
     WxModule,
+    PrimsaModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],

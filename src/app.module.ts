@@ -9,7 +9,7 @@ import { UserModule } from '@/modules/user/user.module';
 
 import { WxModule } from './modules/wx/wx.module';
 import { PrimsaModule } from './prisma/prisma.module';
-import { RedisModule } from './redis/redis.module';
+// import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -29,7 +29,7 @@ import { RedisModule } from './redis/redis.module';
       },
     }),
     PrimsaModule,
-    RedisModule,
+    // RedisModule,
     AuthModule,
     UserModule,
     MeetingRoomModule,
